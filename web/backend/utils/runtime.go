@@ -7,14 +7,16 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+
+	"github.com/sipeed/picoclaw/pkg/config"
 )
 
 // GetDefaultConfigPath returns the default path to the picoclaw config file.
 func GetDefaultConfigPath() string {
-	if configPath := os.Getenv("PICOCLAW_CONFIG"); configPath != "" {
+	if configPath := os.Getenv(config.EnvConfig); configPath != "" {
 		return configPath
 	}
-	if picoclawHome := os.Getenv("PICOCLAW_HOME"); picoclawHome != "" {
+	if picoclawHome := os.Getenv(config.EnvHome); picoclawHome != "" {
 		return filepath.Join(picoclawHome, "config.json")
 	}
 	home, err := os.UserHomeDir()
@@ -35,7 +37,7 @@ func FindPicoclawBinary() string {
 		binaryName = "picoclaw.exe"
 	}
 
-	if p := os.Getenv("PICOCLAW_BINARY"); p != "" {
+	if p := os.Getenv(config.EnvBinary); p != "" {
 		if info, _ := os.Stat(p); info != nil && !info.IsDir() {
 			return p
 		}
